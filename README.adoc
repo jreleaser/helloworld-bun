@@ -1,0 +1,30 @@
+= Helloworld in Bun
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+This repository shows how to configure link:https://github.com/features/actions[GitHub Actions] and link:https://jreleaser.org/[JReleaser] to:
+
+ * compile a helloworld app for the following targets:
+  ** `linux-x86_64`
+  ** `linux-aarch_64`
+  ** `osx-aarch_64`
+  ** `osx-x86_64`
+  ** `windows-x86_64`
+ * assemble zip distributions with JReleaser
+ * create rolling early-access releases with JReleaser on every push to `main` branch
+
+### Commands
+
+```
+$ jreleaser assemble
+$ jreleaser release
+```
+
+IMPORTANT: JReleaser requires 2 additional inputs that may be set as environment variables, `JRELEASER_PROJECT_VERSION` and `JRELEASER_GITHUB_TOKEN`. 
+More information about environment variable configuration may be found in the link:https://jreleaser.org/guide/latest/reference/environment.html[guide].
