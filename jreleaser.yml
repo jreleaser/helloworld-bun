@@ -1,0 +1,57 @@
+matrix:
+  rows:
+    - { target: bun-darwin-arm64, ext: '',     platform: osx-aarch_64   }
+    - { target: bun-darwin-x64,   ext: '',     platform: osx-x86_64     }
+    - { target: bun-linux-arm64,  ext: '',     platform: linux-aarch_64 }
+    - { target: bun-linux-x64,    ext: '',     platform: linux-x86_64   }
+    - { target: bun-windows-x64,  ext: '.exe', platform: windows-x86_64 }
+
+hooks:
+  script:
+    before:
+      - run: |
+          bun build --compile --target={{ matrix.target }} src/main.ts --outfile target/{{ matrix.platform }}/helloworld{{ matrix.ext }}
+        applyDefaultMatrix: true
+        verbose: true
+        filter:
+          includes: ['assemble']
+          
+project:
+  name: helloworld
+  description: HelloWorld in Bun
+  longDescription: HelloWorld in Bun
+  links:
+    homepage: https://github.com/jreleaser/helloworld-bun
+  authors:
+    - Andres Almiray
+  license: Apache-2.0
+  inceptionYear: 2025
+  stereotype: CLI
+    
+release:
+  github:
+    overwrite: true
+    changelog:
+      formatted: ALWAYS
+      preset: conventional-commits
+      contributors:
+        format: '- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}'
+        
+assemble:
+  archive:
+    helloworld:
+      active: ALWAYS
+      formats: [ ZIP ]
+      applyDefaultMatrix: true
+      archiveName: '{{distributionName}}-{{projectVersion}}-{{ matrix.platform }}'
+      fileSets:
+        - input: 'target/{{ matrix.platform }}'
+          output: 'bin'
+          includes: [ 'helloworld{.exe,}' ]
+        - input: '.'
+          includes: [ 'LICENSE' ]
+        
+distributions:
+  helloworld:
+    executable:
+      windowsExtension: exe
